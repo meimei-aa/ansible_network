@@ -1,0 +1,19 @@
+---
+- hosts: sw
+  gather_facts: no 
+
+  tasks:
+    - name: command test
+      ios_command:
+        commands:
+          - show run
+      register: result
+
+    - name: copy result
+      copy:
+        content: "{{ result.stdout[0] }}"
+        dest: "files/{{ inventory_hostname }}_config"
+
+  vars:
+    ansible_connection: network_cli
+    ansible_network_os: ios
